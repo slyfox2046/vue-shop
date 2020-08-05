@@ -26,7 +26,7 @@
       return {
         // 这是登陆表单的数据对象
         loginForm: {
-          username: 'root',
+          username: 'admin',
           password: '123456'
         },
         loginFormRules: {
@@ -50,8 +50,17 @@
       },
       login() {
         this.$refs.loginFormRef.validate(
-          (valid) => {
-            if (!valid) return;
+          async valid => {
+            if (!valid) return
+            const { data: res } = await this.$http.post('login', this.loginForm)
+            console.log(res)
+            if (res.meta.status !== 200) return this.$message.error('登录失败！')
+            this.$message.success('登录成功')
+
+            // A.登录成功之后，需要将后台返回的token保存到sessionStorage中
+            window.sessionStorage.setItem('token', res.data.token)
+            // B. 操作完毕之后，需要跳转到/home
+            this.$router.push('/home')
           }
         )
       }
