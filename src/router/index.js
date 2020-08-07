@@ -2,8 +2,17 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../components/Home'
 import Login from '../components/Login'
+import Users from '../components/user/Users'
+import Welcome from '../components/Welcome'
 
 Vue.use(VueRouter)
+
+// router文件夹-->index.js文件
+// cv以下代码解决路由地址重复的报错问题(一劳永逸)
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
 
 const routes = [
   // 路由重定向
@@ -16,7 +25,19 @@ const routes = [
   {
     path: '/home',
     name: 'home',
-    component: Home
+    redirect: '/welcome',
+    component: Home,
+    children: [
+      {
+        path: '/welcome',
+        component: Welcome
+      },
+      {
+        path: '/users',
+        name: 'users',
+        component: Users
+      }
+    ]
   }
 ]
 
