@@ -15,8 +15,10 @@ import {
   MenuItem,
   MenuItemGroup,
   Message,
+  Pagination,
   Row,
   Submenu,
+  Switch,
   Table,
   TableColumn,
   Tooltip
@@ -43,4 +45,6 @@ Vue.use(Col)
 Vue.use(Table)
 Vue.use(Tooltip)
 Vue.use(TableColumn)
+Vue.use(Switch)
+Vue.use(Pagination)
 Vue.prototype.$message = Message
