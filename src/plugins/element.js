@@ -16,6 +16,7 @@ import {
   MenuItem,
   MenuItemGroup,
   Message,
+  MessageBox,
   Pagination,
   Row,
   Submenu,
@@ -49,4 +50,7 @@ Vue.use(TableColumn)
 Vue.use(Switch)
 Vue.use(Pagination)
 Vue.use(Dialog)
+// MessageBox 不用use
+// Vue.use(MessageBox)
 Vue.prototype.$message = Message
+Vue.prototype.$confirm = MessageBox.confirm
