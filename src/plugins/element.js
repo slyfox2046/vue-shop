@@ -23,6 +23,7 @@ import {
   Switch,
   Table,
   TableColumn,
+  Tag,
   Tooltip
 } from 'element-ui'
 import Vue from 'vue'
@@ -50,6 +51,7 @@ Vue.use(TableColumn)
 Vue.use(Switch)
 Vue.use(Pagination)
 Vue.use(Dialog)
+Vue.use(Tag)
 // MessageBox 不用use
 // Vue.use(MessageBox)
 Vue.prototype.$message = Message
