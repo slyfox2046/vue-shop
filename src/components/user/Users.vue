@@ -116,10 +116,12 @@
           // 合法邮箱
           return cb()
         }
-        cb(new Error('请输入合法的邮箱'))
-      }
+        cb(new Error('请输入合法的邮箱!'))
 
       // 验证手机号的规则
+      }
+      // master 修改
+
       var checkMobile = (rule, value, cb) => {
         const regMobile = /^(0|86|17951)?(13[0-9]|15[012356789]17[678]18[0-9]|14[57])[0-9]{8}$/
         if (regMobile.test(value)) {
