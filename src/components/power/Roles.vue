@@ -28,7 +28,8 @@
 
                 <el-row :class="[i2===0?'':'bdtop','vcenter']" v-for="(item2,i2) in item1.children" :key="item2.id">
                   <el-col :span="6">
-                    <el-tag type="success" closable @close="removeRightById(scope.row,item2.id)">{{item2.authName}}</el-tag>
+                    <el-tag type="success" closable @close="removeRightById(scope.row,item2.id)">{{item2.authName}}
+                    </el-tag>
                     <i class="el-icon-caret-right"></i>
                   </el-col>
                   <el-col :span="18">
@@ -52,10 +53,11 @@
         <el-table-column label="角色名称" prop="roleName"></el-table-column>
         <el-table-column label="角色描述" prop="roleDesc"></el-table-column>
         <el-table-column label="操作" prop="" width="300px">
-          <template slot-scope="">
+          <template slot-scope="scope">
             <el-button size="mini" icon="el-icon-edit" type="primary" @click="a">编辑</el-button>
             <el-button size="mini" icon="el-icon-delete" type="danger" @click="a">删除</el-button>
-            <el-button size="mini" icon="el-icon-setting" type="warning" @click="a">分配权限</el-button>
+            <el-button size="mini" icon="el-icon-setting" type="warning" @click="showSetRightDialog(scope.row)">分配权限
+            </el-button>
 
           </template>
         </el-table-column>
@@ -63,6 +65,16 @@
       </el-table>
 
     </el-card>
+    <!-- 分配权限对话框 -->
+    <el-dialog title="分配权限" :visible.sync="setRightDialogVisible" width="50%" @close="setRightDialogClosed">
+      <!-- 树形控件 -->
+      <el-tree :data="rightsList" :props="treeProps" show-checkbox node-key="id" default-expand-all
+        :default-checked-keys="defKeys"></el-tree>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="setRightDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="setRightDialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
 
   </div>
 </template>
@@ -71,7 +83,17 @@
     data() {
       return {
         // 角色列表
-        rolesList: []
+        rolesList: [],
+        setRightDialogVisible: false,
+        // 所有权限的数据
+        rightsList: [],
+        // 树形控件的属性绑定对象
+        treeProps: {
+          children: 'children',
+          label: 'authName'
+        },
+        // 默认选中的节点Id值
+        defKeys: [105, 116]
       }
     },
 
@@ -102,6 +124,27 @@
 
         // this.getRolesList() 不调用，会刷新页面
         role.children = res.data
+      },
+      // 展开分配权限对话框
+      async showSetRightDialog(role) {
+        // 获取所有权限的数据
+        const { data: res } = await this.$http.get('rights/tree')
+        if (res.meta.status !== 200) return this.$message.error('获取权限数据失败！')
+        this.rightsList = res.data
+        this.getLeafKeys(role, this.defKeys)
+        this.setRightDialogVisible = true
+      },
+      // 通过递归的形式获取角色下三级权限的ID,并保存到defKeys 数组中
+      getLeafKeys(node, arr) {
+        // 如果当前node节点不包含children属性，则是三级节点
+        if (!node.children) {
+          return arr.push(node.id)
+        }
+        node.children.forEach(item => this.getLeafKeys(item, arr))
+      },
+      // 监听分配权限对话的关闭事件
+      setRightDialogClosed() {
+        this.defKeys = []
       },
       addRole() {
 

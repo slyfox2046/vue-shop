@@ -24,7 +24,8 @@ import {
   Table,
   TableColumn,
   Tag,
-  Tooltip
+  Tooltip,
+  Tree
 } from 'element-ui'
 import Vue from 'vue'
 
@@ -47,6 +48,7 @@ Vue.use(Row)
 Vue.use(Col)
 Vue.use(Table)
 Vue.use(Tooltip)
+Vue.use(Tree)
 Vue.use(TableColumn)
 Vue.use(Switch)
 Vue.use(Pagination)
