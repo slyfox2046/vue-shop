@@ -16,11 +16,39 @@
       <el-table :data="rolesList" border stripe>
         <el-table-column type="expand">
           <template slot-scope="scope">
-        <pre></pre>
+            <el-row :class="['bdbtoom',i1===0 ?'bdtop':'','vcenter']" v-for="(item1,i1) in scope.row.children"
+              :key="item1.id">
+              <!-- 渲染一级权限 -->
+              <el-col :span="5">
+                <el-tag closable @close="removeRightById(scope.row,item1.id)">{{item1.authName}}</el-tag>
+                <i class="el-icon-caret-right"></i>
+              </el-col>
+              <!-- 渲染二级和三级权限 -->
+              <el-col :span="19">
+
+                <el-row :class="[i2===0?'':'bdtop','vcenter']" v-for="(item2,i2) in item1.children" :key="item2.id">
+                  <el-col :span="6">
+                    <el-tag type="success" closable @close="removeRightById(scope.row,item2.id)">{{item2.authName}}</el-tag>
+                    <i class="el-icon-caret-right"></i>
+                  </el-col>
+                  <el-col :span="18">
+                    <el-row :class="[i3===0?'':'bdtop']" v-for="(item3,i3) in item2.children" :key="item3.id">
+                      <el-col>
+                        <el-tag type="warning" closable @close="removeRightById(scope.row,item3.id)">{{item3.authName}}
+                        </el-tag>
+                      </el-col>
+
+                    </el-row>
+                  </el-col>
+                </el-row>
+
+              </el-col>
+            </el-row>
+
           </template>
         </el-table-column>
         <!-- 索引列 -->
-        <el-table-column type="index"></el-table-column>
+        <el-table-column type="index" label="#"></el-table-column>
         <el-table-column label="角色名称" prop="roleName"></el-table-column>
         <el-table-column label="角色描述" prop="roleDesc"></el-table-column>
         <el-table-column label="操作" prop="" width="300px">
@@ -60,10 +88,43 @@
         }
         this.rolesList = res.data
         console.log(this.rightsList)
-      }
+      },
+      // 根据ID删除用户是否删除
+      async removeRightById(role, rightId) {
+        const confirmResult = await this.$confirm('此操作将永久删除该权限, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).catch(err => err)
+        if (confirmResult !== 'confirm') return this.$message.info('取消了删除！')
+        const { data: res } = await this.$http.delete(`roles/${role.id}/rights/${rightId}`)
+        if (res.meta.status !== 200) return this.$message.error('删除权限失败！')
+
+        // this.getRolesList() 不调用，会刷新页面
+        role.children = res.data
+      },
+      addRole() {
+
+      },
+      a() { }
     }
   }
 </script>
 <style lang="less" scoped>
+  .el-tag {
+    margin: 7px;
+  }
 
+  .bdtop {
+    border-top: 1px solid #eee;
+  }
+
+  .bdbtoom {
+    border-bottom: 1px solid #eee;
+  }
+
+  .vcenter {
+    display: flex;
+    align-items: center;
+  }
 </style>
