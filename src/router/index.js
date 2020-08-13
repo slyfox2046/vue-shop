@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import Cate from '../components/goods/Cate'
 import Home from '../components/Home'
 import Login from '../components/Login'
 import Rights from '../components/power/Rights'
@@ -45,6 +46,10 @@ const routes = [
       {
         path: '/roles',
         component: Roles
+      },
+      {
+        path: '/categories',
+        component: Cate
       }
     ]
   }

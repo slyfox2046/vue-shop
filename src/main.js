@@ -1,5 +1,6 @@
 import axios from 'axios'
 import Vue from 'vue'
+import TreeTable from 'vue-table-with-tree-grid'
 import App from './App.vue'
 // 导入全局样式表
 import './assets/css/global.css'
@@ -23,3 +24,5 @@ new Vue({
   router,
   render: h => h(App)
 }).$mount('#app')
+
+Vue.component('tree-table', TreeTable)

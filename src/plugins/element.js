@@ -4,6 +4,7 @@ import {
   BreadcrumbItem,
   Button,
   Card,
+  Cascader,
   Col,
   Container,
   Dialog,
@@ -31,6 +32,7 @@ import {
 } from 'element-ui'
 import Vue from 'vue'
 
+Vue.use(Cascader)
 Vue.use(Button)
 Vue.use(Form)
 Vue.use(FormItem)
