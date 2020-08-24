@@ -1,4 +1,5 @@
 import {
+  Alert,
   Aside,
   Breadcrumb,
   BreadcrumbItem,
@@ -26,6 +27,8 @@ import {
   Switch,
   Table,
   TableColumn,
+  TabPane,
+  Tabs,
   Tag,
   Tooltip,
   Tree
@@ -43,6 +46,7 @@ Vue.use(Aside)
 Vue.use(Main)
 Vue.use(Menu)
 Vue.use(Submenu)
+Vue.use(Alert)
 Vue.use(MenuItem)
 Vue.use(MenuItemGroup)
 Vue.use(Breadcrumb)
@@ -59,6 +63,8 @@ Vue.use(Pagination)
 Vue.use(Dialog)
 Vue.use(Tag)
 Vue.use(Select)
+Vue.use(Tabs)
+Vue.use(TabPane)
 Vue.use(Option)
 // MessageBox 不用use
 // Vue.use(MessageBox)
