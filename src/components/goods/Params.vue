@@ -37,7 +37,8 @@
               <template slot-scope="scope">
                 <el-button type="primary" size="mini" @click="showEditDialog(scope.row.attr_id)" icon="el-icon-edit">编辑
                 </el-button>
-                <el-button type="danger" size="mini" @click=";" icon="el-icon-delete">删除</el-button>
+                <el-button type="danger" size="mini" @click="removeParams(scope.row.attr_id)" icon="el-icon-delete">删除
+                </el-button>
 
               </template>
             </el-table-column>
@@ -60,7 +61,8 @@
               <template slot-scope="scope">
                 <el-button type="primary" size="mini" @click="showEditDialog(scope.row.attr_id)" icon="el-icon-edit">编辑
                 </el-button>
-                <el-button type="danger" size="mini" @click=";" icon="el-icon-delete">删除</el-button>
+                <el-button type="danger" size="mini" @click="removeParams(scope.row.attr_id)" icon="el-icon-delete">删除
+                </el-button>
 
               </template>
             </el-table-column>
@@ -231,6 +233,27 @@
           this.getParamsData()
           this.editDialogVisible = false
         })
+      },
+      // 根据id删除对应的id项
+      async removeParams(attr_id) {
+        const confirmResult = await this.$confirm('此操作将永久删除该参数, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).catch(err => err)
+
+        if (confirmResult !== 'confirm') {
+          return this.$message.info('已取消删除！')
+        }
+        // 删除的业务逻辑
+        const { data: res } = await this.$http.delete(`categories/${this.cateId}/attributes/${attr_id}`)
+
+        if (res.meta.status !== 200) {
+          return this.$message.error('删除参数失败!')
+        }
+
+        this.$message.success('删除参数成功！')
+        this.getParamsData()
       }
     }
 
