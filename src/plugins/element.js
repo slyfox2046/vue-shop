@@ -23,6 +23,8 @@ import {
   Pagination,
   Row,
   Select,
+  Step,
+  Steps,
   Submenu,
   Switch,
   Table,
@@ -64,6 +66,8 @@ Vue.use(Dialog)
 Vue.use(Tag)
 Vue.use(Select)
 Vue.use(Tabs)
+Vue.use(Step)
+Vue.use(Steps)
 Vue.use(TabPane)
 Vue.use(Option)
 // MessageBox 不用use
