@@ -52,12 +52,19 @@
           </el-tab-pane>
           <el-tab-pane label="商品属性" name="2">
             <el-form-item :label="item.attr_name" v-for="(item) in onlyTableData" :key="item.attr_id">
-<el-input v-model="item.attr_vals" placeholder=""></el-input>
+              <el-input v-model="item.attr_vals" placeholder=""></el-input>
 
             </el-form-item>
 
           </el-tab-pane>
-          <el-tab-pane label="商品图片" name="3">商品图片</el-tab-pane>
+          <el-tab-pane label="商品图片" name="3">
+            <!-- action 图片要上传到的后台API地址 -->
+            <el-upload :action="uploadURL" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList"
+              list-type="picture" :headers="headerObj" :on-success="handelSuccess">
+              <el-button size="small" type="primary">点击上传</el-button>
+              <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
+            </el-upload>
+          </el-tab-pane>
           <el-tab-pane label="商品内容" name="4">商品内容</el-tab-pane>
         </el-tabs>
       </el-form>
@@ -77,7 +84,9 @@
           goods_weight: 0,
           goods_number: 0,
           // 商品分类数组
-          goods_cat: []
+          goods_cat: [],
+          // 图片数组
+          pics: []
         },
         addFormRues: {
           goods_name: [{ required: true, message: '请输入商品名称', trigger: 'blur' }],
@@ -92,7 +101,14 @@
         // 动态参数列表
         manyTableData: [],
         // 静态属性列表
-        onlyTableData: []
+        onlyTableData: [],
+        // 上传url的地址
+        uploadURL: 'http://127.0.0.1:8888/api/private/v1/upload',
+        fileList: [],
+        // 图片上传组件的headers请求头对象
+        headerObj: {
+          Authorization: window.sessionStorage.getItem('token')
+        }
       }
     },
     computed: {
@@ -149,6 +165,27 @@
           // })
           this.onlyTableData = res.data
         }
+      },
+      // 处理图片预览效果
+      handlePreview() {
+
+      },
+      // 处理移除图片的操作
+      handleRemove(file) {
+        // console.log(file)
+        // 1. 获取将要删除的图片的临时路径
+        const filePath = file.response.data.tmp_path
+        // 2. 从pics数组中，找到这个图片对应的索引值
+        const i = this.addForm.pics.findIndex(x => x.pic === filePath)
+        // 3. 调用数组的splice方法，把图片信息对象，从pics数组中移除
+        this.addForm.pics.splice(i, 1)
+      },
+      // 监听图片上传成功事件
+      handelSuccess(response) {
+        // 1. 拼接得到一个图片信息对象
+        const picInfo = { pic: response.data.tmp_path }
+        // 2. 将图片信息对象，push到pics数组中
+        this.addForm.pics.push(picInfo)
       }
     }
   }

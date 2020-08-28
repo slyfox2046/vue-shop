@@ -35,7 +35,8 @@ import {
   Tabs,
   Tag,
   Tooltip,
-  Tree
+  Tree,
+  Upload
 } from 'element-ui'
 import Vue from 'vue'
 
@@ -74,6 +75,7 @@ Vue.use(Step)
 Vue.use(Steps)
 Vue.use(TabPane)
 Vue.use(Option)
+Vue.use(Upload)
 // MessageBox 不用use
 // Vue.use(MessageBox)
 Vue.prototype.$message = Message
