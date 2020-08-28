@@ -6,6 +6,8 @@ import {
   Button,
   Card,
   Cascader,
+  Checkbox,
+  CheckboxGroup,
   Col,
   Container,
   Dialog,
@@ -39,6 +41,8 @@ import Vue from 'vue'
 
 Vue.use(Cascader)
 Vue.use(Button)
+Vue.use(Checkbox)
+Vue.use(CheckboxGroup)
 Vue.use(Form)
 Vue.use(FormItem)
 Vue.use(Input)
