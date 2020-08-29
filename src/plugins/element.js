@@ -39,6 +39,8 @@ import {
   Upload
 } from 'element-ui'
 import Vue from 'vue'
+import Timeline from './timeline'
+import TimelineItem from './timeline-item'
 
 Vue.use(Cascader)
 Vue.use(Button)
@@ -76,6 +78,8 @@ Vue.use(Steps)
 Vue.use(TabPane)
 Vue.use(Option)
 Vue.use(Upload)
+Vue.use(Timeline)
+Vue.use(TimelineItem)
 // MessageBox 不用use
 // Vue.use(MessageBox)
 Vue.prototype.$message = Message
