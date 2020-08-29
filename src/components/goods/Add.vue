@@ -65,15 +65,27 @@
               <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
             </el-upload>
           </el-tab-pane>
-          <el-tab-pane label="商品内容" name="4">商品内容</el-tab-pane>
+          <el-tab-pane label="商品内容" name="4">
+            <!-- 富文本编辑器 Two-way Data-Binding -->
+            <quill-editor ref="myQuillEditor" v-model="addForm.goods_introduce" />
+            <el-button type="primary" class='btnAdd' @click="add">添加商品</el-button>
+
+          </el-tab-pane>
         </el-tabs>
       </el-form>
     </el-card>
+    <!-- 图片预览 -->
+    <el-dialog title="图片预览" :visible.sync="previewVisible" width="50%">
+      <img :src="previewPath" alt="" class="previewImg">
+    </el-dialog>
 
   </div>
 </template>
 <script>
+
+  import _ from 'lodash'
   export default {
+
     data() {
       return {
         activeIndex: '0',
@@ -86,7 +98,9 @@
           // 商品分类数组
           goods_cat: [],
           // 图片数组
-          pics: []
+          pics: [],
+          goods_introduce: '',
+          attrs: []
         },
         addFormRues: {
           goods_name: [{ required: true, message: '请输入商品名称', trigger: 'blur' }],
@@ -108,7 +122,9 @@
         // 图片上传组件的headers请求头对象
         headerObj: {
           Authorization: window.sessionStorage.getItem('token')
-        }
+        },
+        previewPath: '',
+        previewVisible: false
       }
     },
     computed: {
@@ -167,8 +183,9 @@
         }
       },
       // 处理图片预览效果
-      handlePreview() {
-
+      handlePreview(file) {
+        this.previewPath = file.response.data.url
+        this.previewVisible = true
       },
       // 处理移除图片的操作
       handleRemove(file) {
@@ -186,6 +203,44 @@
         const picInfo = { pic: response.data.tmp_path }
         // 2. 将图片信息对象，push到pics数组中
         this.addForm.pics.push(picInfo)
+      },
+      add() {
+        // console.log(this.addForm)
+        this.$refs.addFormRef.validate(async valid => {
+          if (!valid) {
+            return this.$message.error('请填写必要的表单项！')
+          }
+          // 执行添加的业务逻辑
+          // lodash cloneDeep(obj)
+          const form = _.cloneDeep(this.addForm)
+          form.goods_cat = form.goods_cat.join(',')
+          // 处理动态参数
+          // console.log(this.manyTableData)
+          this.manyTableData.forEach(item => {
+            // console.log(item)
+            const newInfo = {
+              attr_id: item.attr_id,
+              attr_value: item.attr_vals.join(' ')
+            }
+            this.addForm.attrs.push(newInfo)
+          })
+          // 处理静态属性
+          this.onlyTableData.forEach(item => {
+            const newInfo = {
+              attr_id: item.attr_id,
+              attr_value: item.attr_vals
+            }
+            this.addForm.attrs.push(newInfo)
+          })
+          form.attrs = this.addForm.attrs
+          console.log(form)
+          // 发起请求添加商品
+
+          const { data: res } = await this.$http.post('goods', form)
+          if (res.meta.status !== 201) return this.$message.error(res.meta.msg)
+          this.$message.success('添加商品成功！')
+          this.$router.push('/goods')
+        })
       }
     }
   }
@@ -197,5 +252,13 @@
 
   .el-checkbox {
     margin: 0 10px 0 0 !important
+  }
+
+  .previewImg {
+    width: 100%
+  }
+
+  .btnAdd {
+    margin-top: 15px;
   }
 </style>
