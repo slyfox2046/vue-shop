@@ -3,12 +3,13 @@ import VueRouter from 'vue-router'
 import Add from '../components/goods/Add'
 import Cate from '../components/goods/Cate'
 import GoodsList from '../components/goods/List'
-import Order from '../components/Order/Order'
 import Params from '../components/goods/Params'
 import Home from '../components/Home'
 import Login from '../components/Login'
+import Order from '../components/Order/Order'
 import Rights from '../components/power/Rights'
 import Roles from '../components/power/Roles'
+import Report from '../components/report/Report'
 import Users from '../components/user/Users'
 import Welcome from '../components/Welcome'
 
@@ -70,6 +71,10 @@ const routes = [
       {
         path: '/orders',
         component: Order
+      },
+      {
+        path: '/reports',
+        component: Report
       }
     ]
   }
