@@ -41,8 +41,8 @@
           </template>
         </el-table-column>
         <el-table-column label="操作" width="130px">
-          <template slot-scope="scope">
-            <el-button type="primary" size="mini" icon="el-icon-edit" @click="showBox(scope.row)"></el-button>
+          <template>
+            <el-button type="primary" size="mini" icon="el-icon-edit" @click="showBox"></el-button>
             <el-button type="success" size="mini" icon="el-icon-location" @click="showProgressBox">
             </el-button>
 
